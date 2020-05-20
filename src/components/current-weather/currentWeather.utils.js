@@ -25,7 +25,7 @@ const weatherIcons = [
     }
 ];
 
-const nightIconWeather = [36,38,39,40,41,42,43,44];
+// const nightIconWeather = [36,38,39,40,41,42,43,44];
 
 export const findImageName = (weatherIcon) => {
     let name = '';
@@ -38,4 +38,4 @@ export const findImageName = (weatherIcon) => {
     return name;
 };
 
-export const isNightIcon = (weatherIcon) => nightIconWeather.includes(weatherIcon);
+//export const isNightIcon = (weatherIcon) => nightIconWeather.includes(weatherIcon);

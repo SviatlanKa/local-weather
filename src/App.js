@@ -13,28 +13,14 @@ const convertKeys = obj => {
 
 const convertToCelsuis = temp => {
     return (temp - 32) * 5 / 9;
-}
-
-// let hours12Forecast = {
-//     time: '',
-//     weatherIcon: null,
-//     temperature: {},
-//     precipitationProbability: null
-// };
-
-// let days10Forecast = {
-//     date: '',
-//     dayWeatherIcon: null,
-//     maxTemperature: null,
-//     minTemperature: null
-// };
+};
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
-            isCelsius: false,
+            isMetricSys: false,
             curWeather: {
                 weatherText: '',
                 weatherIcon: null,
@@ -57,31 +43,37 @@ class App extends Component {
             const API_Key = 'eG2SeohPQfwFjIv8ihiTTvnASCNPzD1L';
             const baseUrl = 'http://dataservice.accuweather.com';
 
+            const { isMetricSys } = this.state;
+
             return fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${API_Key}&q=${latitude},${longitude}`)
                 .then(res => res.json())
                 .then(json => {
                     const locationKey = json.Key;
                     this.setState({ name: json.EnglishName });
 
-                    fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${API_Key}`)
+                    fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${API_Key}&details=true`)
                         .then(res => res.json())
                         .then(json => {
                             json = convertKeys(json[0]);
                             const {
                                 weatherText,
                                 weatherIcon,
+                                isDayTime,
                                 hasPrecipitation,
-                                precipitationType,
-                                realFeelTemperature,
-                                wind,
-                                visibility
+                                precipitationType
                             } = json;
-                            const temperature = this.state.isCelsius ? json.temperature.Metric.Value
-                                : json.temperature.Imperial.Value;
+                            const temperature = isMetricSys ? json.temperature.Metric
+                                : json.temperature.Imperial;
+                            const realFeelTemperature = isMetricSys ? json.realFeelTemperature.Metric
+                                : json.realFeelTemperature.Imperial;
+                            const speed = isMetricSys ? json.wind.Speed.Metric : json.wind.Speed.Imperial;
+                            const wind = { speed, direction: json.wind.Direction.English };
+                            const visibility = isMetricSys ? json.visibility.Metric : json.visibility.Imperial;
                             this.setState({
                                 curWeather: {
                                     weatherText,
                                     weatherIcon,
+                                    isDayTime,
                                     hasPrecipitation,
                                     precipitationType,
                                     temperature,
@@ -103,7 +95,7 @@ class App extends Component {
                                     precipitationProbability
                                 } = item;
                                 const time = item.dateTime;
-                                const temperature = this.state.isCelsius ? convertToCelsuis(item.temperature.Value)
+                                const temperature = isMetricSys ? convertToCelsuis(item.temperature.Value)
                                     : item.temperature.Value;
                                 hours12ForecastArray.push({
                                         time,
@@ -123,9 +115,9 @@ class App extends Component {
                             json.DailyForecasts.map(item => {
                                 const date = item.Date;
                                 const dayWeatherIcon = item.Day.Icon;
-                                const maxTemperature = this.state.isCelsius ? convertToCelsuis(item.Temperature.Maximum.Value)
+                                const maxTemperature = isMetricSys ? convertToCelsuis(item.Temperature.Maximum.Value)
                                     : item.Temperature.Maximum.Value;
-                                const minTemperature = this.state.isCelsius ? convertToCelsuis(item.Temperature.Minimum.Value)
+                                const minTemperature = isMetricSys ? convertToCelsuis(item.Temperature.Minimum.Value)
                                     : item.Temperature.Minimum.Value;
                                 days5ForecastArray.push({
                                     date,
@@ -152,19 +144,14 @@ class App extends Component {
 
     render() {
         const { name,
-            isCelsius,
+            isMetricSys,
             curWeather,
             hours12ForecastArray,
             days5ForecastArray } = this.state;
 
         return (
             <div className="App">
-                <h1>Show Local Weather</h1>
-                <span>{curWeather.temperature}</span>
-                <CurrentWeather curWeather={curWeather}>
-
-                </CurrentWeather>
-
+                <CurrentWeather curWeather={curWeather} name={name} />
             </div>
         );
     }

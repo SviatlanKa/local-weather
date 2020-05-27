@@ -1,91 +1,92 @@
-import React from "react";
-import { findImageName } from "./currentWeather.utils";
-import sun from '../../assets/sun.jpg';
-import clouds from '../../assets/clouds.jpg';
-import fog from '../../assets/fog.jpg';
-import rain from '../../assets/rain.jpg';
-import lightning from '../../assets/lightning.jpg';
-import wind from '../../assets/wind.jpg';
-import snow from '../../assets/snow.jpg';
-import moon from '../../assets/moon.jpg';
+import React, { useState, useEffect } from "react";
+import {findImageName, convertKeys, findBackgroundUrl} from "../../utils/utils";
+import WithSpinner from '../with-spinner/WithSpinner';
+import WeatherIcon from '../weather-icon/WeatherIcon';
 import './CurrentWeather.css';
 
-const findBackgroundUrl = (imgName) => {
-    let url = null;
-    switch (imgName) {
-        case "sun":
-            url = `url('${sun}')`;
-            break;
-        case "clouds":
-            url = `url('${clouds}')`;
-            break;
-        case "fog":
-            url = `url('${fog}')`;
-            break;
-        case "rain":
-            url = `url('${rain}')`;
-            break;
-        case "lightning":
-            url = `url('${lightning}')`;
-            break;
-        case "wind":
-            url = `url('${wind}')`;
-            break;
-        case "snow":
-            url = `url('${snow}')`;
-            break;
-        case "moon":
-            url = `url('${moon}')`;
-            break;
-        default:
-            break;
-    }
-    return url;
-};
+const CurrentWeather = ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
+    const initCurWeather = {
+        weatherText: '',
+        weatherIcon: null,
+        isDayTime: true,
+        temperature: {},
+        realFeelTemperature: {},
+        wind: { speed: {}, direction: ''},
+        visibility: {}
+    };
+    const { locationKey } = initData;
+    const [curWeather, setCurWeather] = useState(initCurWeather);
+    const [isFetching, setIsFetching] = useState(true);
 
-const CurrentWeather = ({ curWeather, name }) => {
+    useEffect(() => {
+        let didCancel = false;
+        setIsFetching(true);
+        const getCurWeather = async () => {
+            fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`)
+                .then(res => res.json())
+                .then(json => {
+                    json = convertKeys(json[0]);
+                    const {
+                        weatherText,
+                        weatherIcon,
+                        isDayTime
+                    } = json;
+                    const temperature = isMetricSys ? json.temperature.Metric
+                        : json.temperature.Imperial;
+                    const realFeelTemperature = isMetricSys ? json.realFeelTemperature.Metric
+                        : json.realFeelTemperature.Imperial;
+                    const speed = isMetricSys ? json.wind.Speed.Metric : json.wind.Speed.Imperial;
+                    const wind = { speed, direction: json.wind.Direction.English };
+                    const visibility = isMetricSys ? json.visibility.Metric : json.visibility.Imperial;
+                    setCurWeather({
+                        weatherText,
+                        weatherIcon,
+                        isDayTime,
+                        temperature,
+                        realFeelTemperature,
+                        wind,
+                        visibility
+                    });
+                    setIsFetching(false);
+                });
+        }
+        getCurWeather().then(() => didCancel = true);
+    }, [apiKey, baseUrl, isMetricSys, locationKey]);
+
     const {
-        temperature,
-        isDayTime,
-        weatherIcon,
         weatherText,
+        weatherIcon,
+        isDayTime,
+        temperature,
         realFeelTemperature,
         wind,
-        visibility } = curWeather;
+        visibility
+    } = curWeather;
 
-    let imageName = "";
+    if (!isFetching) {
+        const imageName = findImageName(curWeather.weatherIcon);
+        const imageUrl = findBackgroundUrl(imageName);
+        const backgroundImg = document.getElementsByClassName('background-image')[0].style;
 
-    if (weatherIcon) {
-        imageName = findImageName(weatherIcon);
-    } else imageName = isDayTime ? "sun" : "moon";
-
-    const backgroundUrl = findBackgroundUrl(imageName);
+        if (!isDayTime) {
+            backgroundImg.backgroundImage = `linear-gradient(black, black), ${imageUrl}`;
+            backgroundImg.backgroundBlendMode = "saturation";
+        } else backgroundImg.backgroundImage = imageUrl;
+    }
 
     return (
-        <div
-            className="background-image"
-            style={{backgroundImage: backgroundUrl}}
-        >
-            <h1>{name}</h1>
-            <div>
-                <p className="current-temperature">{temperature}</p>
-                <p className="text-weather">{weatherText}</p>
-                <p className="real-feel-temperature">RealFeel {realFeelTemperature}</p>
+        <div className="current-weather">
+            <span className="city-name">{initData.name}</span>
+            <div className="current-weather-rows">
+                <span className="current-temperature">{temperature.Value}°{temperature.Unit}</span>
+                <WeatherIcon icon={weatherIcon}/>
+                <span className="left first">{weatherText}</span>
+                <span className="right first">{wind.speed.Value} {wind.speed.Unit} {wind.direction}</span>
+                <span className="left">RealFeel {realFeelTemperature.Value}°{realFeelTemperature.Unit}</span>
+                <span className="right">Visibility {visibility.Value} {visibility.Unit}</span>
             </div>
-            <div>
-                <img
-                    className="weather-icon"
-                    src={
-                        curWeather.weatherIcon < 10
-                            ? `https://developer.accuweather.com/sites/default/files/0${weatherIcon}-s.png`
-                            : `https://developer.accuweather.com/sites/default/files/${weatherIcon}-s.png`}
-                    alt="weather icon" />
-                <p className="wind">{wind.Value} {wind.Unit} {wind.directon}</p>
-                <p>Visibility {visibility.Value} {visibility.Unit}</p>
-            </div>
-
         </div>
     )
 };
 
-export default CurrentWeather;
+export default WithSpinner(CurrentWeather);

@@ -1,11 +1,32 @@
-.background-image {
-    display: flex;
-    justify-content: center;
-    margin: 2vw auto;
-    padding: 2vw;
-    width: max-content;
-    height: max-content;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+.current-weather {
+    display: grid;
+    width: 100%;
+    color: white;
 }
+
+.current-weather-rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.current-temperature {
+    font-size: 3rem;
+    text-align: left;
+}
+
+.first {
+    margin: 2vw 0 0 0;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.city-name {
+    font-size: 4rem;
+}
+

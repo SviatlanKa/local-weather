@@ -1,4 +1,16 @@
-.hourly-12-forecast {
-    width: 100%;
-    box-shadow: 1px 1px 4px #000000;
+/*.hourly-forecast {*/
+/*    width: 100%;*/
+/*    box-shadow: 1px 1px 4px #000000;*/
+/*}*/
+
+.precipitation-group {
+    font-size: smaller;
+    color: lightgray;
+    filter: drop-shadow(1px 1px 1px #000000);
+}
+
+.precipitation {
+    font-size: larger;
+    color: white;
+    filter: none;
 }

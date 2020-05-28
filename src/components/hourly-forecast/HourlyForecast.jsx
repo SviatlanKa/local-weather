@@ -4,6 +4,7 @@ import WithSpinner from "../with-spinner/WithSpinner";
 import WeatherIcon from "../weather-icon/WeatherIcon";
 import { faTint, faTintSlash } from "@fortawesome/free-solid-svg-icons";
 import { convertKeys, convertToCelsuis } from "../../utils/utils";
+import './HourlyForecast.css'
 
 const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
     const { locationKey } = initData;
@@ -48,14 +49,13 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
         <div className="hourly-forecast">
             {
                 hourlyForecast.map(hourForecast => (
-                        <Fragment>
-                            <div>{hourForecast.time}</div>
-                            <WeatherIcon icon={hourForecast.weatherIcon}/>
-                            <div><FontAwesomeIcon icon={faTint}/>{hourForecast.precipitationProbability}</div>
-                            <div>{hourForecast.temperature}°</div>
-                        </Fragment>
-                )
-
+                    <Fragment>
+                        <div>{hourForecast.time}</div>
+                        <WeatherIcon icon={hourForecast.weatherIcon}/>
+                        <div className="precipitation-group"><FontAwesomeIcon icon={faTint}/><span className="precipitation">{hourForecast.precipitationProbability}</span></div>
+                        <div>{hourForecast.temperature}°</div>
+                    </Fragment>
+                    )
                 )
             }
 

@@ -3,7 +3,8 @@ import { findBackgroundUrl } from './utils/utils';
 import CurrentWeather from './components/current-weather/CurrentWeather';
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import Spinner from "./components/spinner/Spinner";
-import Hourly12Forecast from "./components/hourly12-forecast/Hourly12Forecast";
+import HourlyForecast from "./components/hourly-forecast/HourlyForecast";
+import DailyForecast from "./components/daily-forecast/DailyForecast";
 import './App.css';
 
 
@@ -44,35 +45,6 @@ const App = () => {
         getData().then(() => didCancel = true);
     }, []);
 
-
-
-
-
-                        //
-                        //     fetch(`${baseUrl}/forecasts/v1/daily/5day/${locationKey}?apikey=${API_Key}`)
-                        //         .then(res => res.json())
-                        //         .then(json => {
-                        //             let days5ForecastArray = [];
-                        //             json.DailyForecasts.map(item => {
-                        //                 const date = item.Date;
-                        //                 const dayWeatherIcon = item.Day.Icon;
-                        //                 const maxTemperature = isMetricSys ? convertToCelsuis(item.Temperature.Maximum.Value)
-                        //                     : item.Temperature.Maximum.Value;
-                        //                 const minTemperature = isMetricSys ? convertToCelsuis(item.Temperature.Minimum.Value)
-                        //                     : item.Temperature.Minimum.Value;
-                        //                 days5ForecastArray.push({
-                        //                     date,
-                        //                     dayWeatherIcon,
-                        //                     maxTemperature,
-                        //                     minTemperature
-                        //                 });
-                        //                 return days5ForecastArray;
-                        //             });
-                        //             const isFetching = false;
-                        //             this.setState({ isFetching, days5ForecastArray });
-                        //         });
-                        // })
-
         const curHours = new Date().getHours();
         const imageName = (curHours > 6 && curHours < 22) ? "sun" : "moon";
         const backgroundUrl = findBackgroundUrl(imageName);
@@ -91,12 +63,20 @@ const App = () => {
                                 isMetricSys={isMetricSys}
                                 { ...initData }
                             />
-                            <Hourly10Forecast
+                            <HourlyForecast
                                 isFetching={isFetching}
                                 apiKey={apiKey}
                                 baseUrl={baseUrl}
                                 isMetricSys={isMetricSys}
-                                { ...initData }/>
+                                { ...initData }
+                            />
+                            <DailyForecast
+                                isFetching={isFetching}
+                                apiKey={apiKey}
+                                baseUrl={baseUrl}
+                                isMetricSys={isMetricSys}
+                                { ...initData }
+                            />
                         </div>
                     </Suspense>
                 </ErrorBoundary>

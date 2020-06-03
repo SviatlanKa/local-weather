@@ -1,16 +1,40 @@
-/*.hourly-forecast {*/
-/*    width: 100%;*/
-/*    box-shadow: 1px 1px 4px #000000;*/
-/*}*/
-
-.precipitation-group {
-    font-size: smaller;
-    color: lightgray;
-    filter: drop-shadow(1px 1px 1px #000000);
+.hourly-forecast {
+    display: grid;
+    margin-top: 2vw;
+    border: 3px solid black;
 }
 
-.precipitation {
-    font-size: larger;
-    color: white;
-    filter: none;
+.hourly-forecast-title {
+    text-align: left;
+    margin-bottom: 1vw;
+}
+
+.hourly-forecast-panel {
+    display: flex;
+    border: 3px solid yellow;
+}
+
+.right-arrow, .left-arrow {
+    align-self: center;
+    border: 1px solid black;
+}
+
+.hourly-forecast-rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid red;
+}
+
+.hourly-forecast-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.two {
+    display: none;
+}
+
+.translateX {
+    transform: translateX(-50%);
+    transition: all 1s ease-out;
 }

@@ -5,61 +5,117 @@ import WeatherIcon from "../weather-icon/WeatherIcon";
 import { faTint, faTintSlash } from "@fortawesome/free-solid-svg-icons";
 import { convertKeys, convertToCelsuis } from "../../utils/utils";
 import './HourlyForecast.css'
+import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
 
 const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
     const { locationKey } = initData;
-    const [hourlyForecast, setHourlyForecast] = useState([]);
+    //const [hourlyForecast, setHourlyForecast] = useState([]);
+    const init = () => {// will delete
+        let one = {
+        time: 12,
+        weatherIcon: 2,
+        hasPrecipitation: false,
+        precipitationProbability: 5,
+        temperature: 55
+        }
+        const arrFor = [one];
+        for(let i = 1; i < 12; i++) {
+            let { time,
+                weatherIcon,
+                hasPrecipitation,
+                precipitationProbability,
+                temperature } = one;
+            time++;
+            weatherIcon += 3;
+            hasPrecipitation = !hasPrecipitation;
+            temperature++;
+            one = {time,
+                weatherIcon,
+                hasPrecipitation,
+                precipitationProbability,
+                temperature}
+            arrFor.push(one)
+        }
+        console.log(arrFor)
+        return arrFor;
+    }
+    const initState = init();
+
+    const [hourlyForecast, setHourlyForecast] = useState(initState);
+
     const [isFetching, setIsFetching] = useState(true);
 
-    useEffect(() => {
-        let didCancel = false;
-        setIsFetching(true);
-        const getHourlyForecast = async () => {
-            fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}`)
-                .then(res => res.json())
-                .then(json => {
-                    let hourlyForecast = [];
-                    json.map(item => {
-                        item = convertKeys(item);
-                        const {
-                            weatherIcon,
-                            precipitationProbability
-                        } = item;
-                        const time = new Date(item.dateTime).getHours();
-                        const temperature = isMetricSys ? convertToCelsuis(item.temperature.Value)
-                            : item.temperature.Value;
-                        hourlyForecast.push({
-                            time,
-                            weatherIcon,
-                            precipitationProbability,
-                            temperature
-                        });
-                        return hourlyForecast;
-                    });
-                    setHourlyForecast(hourlyForecast);
-                    setIsFetching(false);
-                });
-        }
-        getHourlyForecast().then(() => didCancel = true);
-    }, [apiKey, baseUrl, isMetricSys, locationKey]);
+    // useEffect(() => {
+    //     let didCancel = false;
+    //     if (didCancel) { //temp block for stopping fetching from API
+    //         setIsFetching(true);
+    //         const getHourlyForecast = async () => {
+    //             fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}`)
+    //                 .then(res => res.json())
+    //                 .then(json => {
+    //                     let hourlyForecast = [];
+    //                     json.map(item => {
+    //                         item = convertKeys(item);
+    //                         const {
+    //                             weatherIcon,
+    //                             hasPrecipitation,
+    //                             precipitationProbability
+    //                         } = item;
+    //                         const time = new Date(item.dateTime).getHours();
+    //                         const temperature = isMetricSys ? convertToCelsuis(item.temperature.Value)
+    //                             : item.temperature.Value;
+    //                         hourlyForecast.push({
+    //                             time,
+    //                             weatherIcon,
+    //                             hasPrecipitation,
+    //                             precipitationProbability,
+    //                             temperature
+    //                         });
+    //                         return hourlyForecast;
+    //                     });
+    //                     setHourlyForecast(hourlyForecast);
+    //                     setIsFetching(false);
+    //                 })
+    //                 .catch(error => console.log(error.message));
+    //         }
+    //         getHourlyForecast().then(() => didCancel = true);
+    //     }
+    // }, [apiKey, baseUrl, isMetricSys, locationKey]);
 
-    console.log(hourlyForecast);
+    const handleClick = () => {
+        document.getElementsByClassName('hourly-forecast-rows')[0].classList.toggle("translateX");
+    }
+
+    const firstGroupData = hourlyForecast.slice(0, 6);
+    const secondGroupData = hourlyForecast.slice(6);
 
     return (
         <div className="hourly-forecast">
-            {
-                hourlyForecast.map(hourForecast => (
-                    <Fragment>
-                        <div>{hourForecast.time}</div>
-                        <WeatherIcon icon={hourForecast.weatherIcon}/>
-                        <div className="precipitation-group"><FontAwesomeIcon icon={faTint}/><span className="precipitation">{hourForecast.precipitationProbability}</span></div>
-                        <div>{hourForecast.temperature}°</div>
-                    </Fragment>
-                    )
-                )
-            }
-
-
+            <span className="hourly-forecast-title">Hourly Forecast</span>
+            <div className="hourly-forecast-panel">
+                <div className="left-arrow" type="button" onClick={() => handleClick()}>
+                    &#10094;
+                </div>
+                <div className="hourly-forecast-rows">
+                    <div className="hourly-forecast-row one">
+                        {
+                            firstGroupData.map((data, index) => (
+                                <HourlyForecastItem key={index} { ...data }/>
+                            ))
+                        }
+                    </div>
+                    <div className="hourly-forecast-row two">
+                        {
+                            secondGroupData.map((data, index) => (
+                                <HourlyForecastItem key={index + 6} { ...data }/>
+                            ))
+                        }
+                    </div>
+                </div>
+                <div className="right-arrow" type="button" onClick={() => handleClick()}>
+                    &#10095;
+                </div>
+            </div>
         </div>
     )
 };

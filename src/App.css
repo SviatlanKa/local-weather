@@ -1,18 +1,21 @@
 .App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   font-size: 1.25em;
+  color: white;
   text-shadow: 1px 1px 4px #000000;
+  border: 1px solid red;
 }
 
 .background-image {
-  display: flex;
-  justify-content: center;
-  margin: 4vw auto;
-  padding: 2vw;
-  width: max-content;
+  padding: 10px;
+  width: min-content;
   min-width: 500px;
   height: max-content;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  border: 1px solid red;
 }

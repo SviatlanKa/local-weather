@@ -1,0 +1,15 @@
+.daily-forecast {
+    display: grid;
+    width: 100%;
+    margin-top: 2vw;
+}
+
+.daily-forecast-title {
+    text-align: left;
+}
+
+.daily-forecast-rows {
+    margin-top: 1vw;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}

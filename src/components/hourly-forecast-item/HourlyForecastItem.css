@@ -1,0 +1,7 @@
+.precipitation-icon {
+    display: inline;
+    margin-right: 4px;
+    font-size: smaller;
+    color: white;
+    filter: drop-shadow(1px 1px 1px #000000);
+}

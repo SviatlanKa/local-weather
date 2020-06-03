@@ -13,41 +13,45 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const App = () => {
     const [initData, setInitData] = useState({
-        locationKey: undefined,
-        name: ''
+        locationKey: 28256,
+        name: 'Minsk'
     });
     const [isMetricSys, setIsMetricSys] = useState(false);
-    const [isFetching, setIsFetching] = useState(true);
+    const [isFetching, setIsFetching] = useState(false); // will change to true
 
-    useEffect(() => {
-        let didCancel = false;
-        setIsFetching(true);
-        const getData = async () => {
-            const showLocation = (position) => {
-                const {latitude, longitude} = position.coords;
-
-                fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
-                    .then(res => res.json())
-                    .then(json => {
-                        setInitData({locationKey: json.Key, name: json.EnglishName});
-                        setIsFetching(false);
-                    })
-                    .catch(err => console.log(err.message));
-            };
-            const errorHandler = (err) => {
-                if (err.code === 1) alert("Error: Access is denied!");
-                if (err.code === 2) alert("Error: Position is unavailable!");
-            };
-            navigator.geolocation ?
-                navigator.geolocation.getCurrentPosition(showLocation, errorHandler)
-                : alert("Sorry, browser does not support geolocation!");
-        };
-        getData().then(() => didCancel = true);
-    }, []);
+    // useEffect(() => {
+    //     let didCancel = false;
+    //     if (didCancel) { //temp block for stopping fetching from API
+    //         setIsFetching(true);
+    //         const getData = async () => {
+    //             const showLocation = (position) => {
+    //                 const {latitude, longitude} = position.coords;
+    //
+    //                 fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
+    //                     .then(res => res.json())
+    //                     .then(json => {
+    //                         setInitData({locationKey: json.Key, name: json.EnglishName});
+    //                         setIsFetching(false);
+    //                     })
+    //                     .catch(err => console.log(err.message));
+    //             };
+    //             const errorHandler = (err) => {
+    //                 if (err.code === 1) alert("Error: Access is denied!");
+    //                 if (err.code === 2) alert("Error: Position is unavailable!");
+    //             };
+    //             navigator.geolocation ?
+    //                 navigator.geolocation.getCurrentPosition(showLocation, errorHandler)
+    //                 : alert("Sorry, browser does not support geolocation!");
+    //         };
+    //         getData().then(() => didCancel = true);
+    //     }
+    // }, []);
 
         const curHours = new Date().getHours();
         const imageName = (curHours > 6 && curHours < 22) ? "sun" : "moon";
         const backgroundUrl = findBackgroundUrl(imageName);
+        console.log(backgroundUrl)
+    console.log(initData)
 
         return (
             <div className="App">

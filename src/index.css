@@ -1,13 +1,20 @@
-body {
-  margin: 0 auto;
+* {
+  margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   width: 100vw;
-  height: auto;
+  height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen','Segoe UI',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

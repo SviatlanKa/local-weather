@@ -1,7 +1,14 @@
 .weather-icon-img {
+    filter: drop-shadow(1px 1px 2px #000000);
+}
+
+.smallSize {
+    width: auto;
+}
+
+.bigSize {
     margin-right: 0;
     margin-left: 50%;
-    width: 50%;
-    filter: drop-shadow(1px 1px 2px #000000);
     horiz-align: right;
+    width: 50%;
 }

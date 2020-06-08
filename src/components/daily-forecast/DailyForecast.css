@@ -2,14 +2,23 @@
     display: grid;
     width: 100%;
     margin-top: 2vw;
+    filter: drop-shadow(3px 1px 2px #3c5563);
+    background-color: rgba(1, 90, 145, .3);
+}
+
+.grey {
+    background-color: rgba(80, 98, 107, .3);
 }
 
 .daily-forecast-title {
+    margin-top: 15px;
+    margin-left: 15px;
     text-align: left;
+    margin-bottom: 1vw;
 }
 
 .daily-forecast-rows {
-    margin-top: 1vw;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    padding-bottom: 20px;
 }

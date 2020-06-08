@@ -1,11 +1,13 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { findBackgroundUrl } from './utils/utils';
-import CurrentWeather from './components/current-weather/CurrentWeather';
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import Spinner from "./components/spinner/Spinner";
+import SetUnitButton from "./components/set-unit-button/SetUnitButton";
+import CurrentWeather from './components/current-weather/CurrentWeather';
 import HourlyForecast from "./components/hourly-forecast/HourlyForecast";
 import DailyForecast from "./components/daily-forecast/DailyForecast";
 import './App.css';
+
 
 
 const apiKey = process.env.REACT_APP_API_KEY;
@@ -34,6 +36,7 @@ const App = () => {
     //                         setIsFetching(false);
     //                     })
     //                     .catch(err => console.log(err.message));
+
     //             };
     //             const errorHandler = (err) => {
     //                 if (err.code === 1) alert("Error: Access is denied!");
@@ -47,45 +50,48 @@ const App = () => {
     //     }
     // }, []);
 
-        const curHours = new Date().getHours();
-        const imageName = (curHours > 6 && curHours < 22) ? "sun" : "moon";
-        const backgroundUrl = findBackgroundUrl(imageName);
-        console.log(backgroundUrl)
-    console.log(initData)
+    const curHours = new Date().getHours();
+    const imageName = (curHours > 6 && curHours < 22) ? "sun" : "moon";
+    const backgroundUrl = findBackgroundUrl(imageName);
 
-        return (
-            <div className="App">
-                <ErrorBoundary>
-                    <Suspense fallback={<Spinner/>}>
-                        <div className="background-image"
-                             style={{backgroundImage: isFetching ? null : backgroundUrl }}
-                        >
-                            <CurrentWeather
-                                isFetching={isFetching}
-                                apiKey={apiKey}
-                                baseUrl={baseUrl}
-                                isMetricSys={isMetricSys}
-                                { ...initData }
-                            />
-                            <HourlyForecast
-                                isFetching={isFetching}
-                                apiKey={apiKey}
-                                baseUrl={baseUrl}
-                                isMetricSys={isMetricSys}
-                                { ...initData }
-                            />
-                            <DailyForecast
-                                isFetching={isFetching}
-                                apiKey={apiKey}
-                                baseUrl={baseUrl}
-                                isMetricSys={isMetricSys}
-                                { ...initData }
-                            />
-                        </div>
-                    </Suspense>
-                </ErrorBoundary>
-            </div>
-        );
+    const handleClick = (value) => {
+        setIsMetricSys(value);
+    }
+
+    return (
+        <div className="App">
+            <ErrorBoundary>
+                <Suspense fallback={<Spinner/>}>
+                    <div className="background-image"
+                         style={{backgroundImage: isFetching ? null : backgroundUrl }}
+                    >
+                        <SetUnitButton isMetricsSys={isMetricSys} onClick={handleClick}/>
+                        <CurrentWeather
+                            isFetching={isFetching}
+                            apiKey={apiKey}
+                            baseUrl={baseUrl}
+                            isMetricSys={isMetricSys}
+                            { ...initData }
+                        />
+                        <HourlyForecast
+                            isFetching={isFetching}
+                            apiKey={apiKey}
+                            baseUrl={baseUrl}
+                            isMetricSys={isMetricSys}
+                            { ...initData }
+                        />
+                        <DailyForecast
+                            isFetching={isFetching}
+                            apiKey={apiKey}
+                            baseUrl={baseUrl}
+                            isMetricSys={isMetricSys}
+                            { ...initData }
+                        />
+                    </div>
+                </Suspense>
+            </ErrorBoundary>
+        </div>
+    );
 }
 
 export default App;

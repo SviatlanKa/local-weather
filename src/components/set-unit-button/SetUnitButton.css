@@ -1,0 +1,5 @@
+.set-units {
+    text-align: right;
+    filter: drop-shadow(1px 1px 1px #000000);
+    cursor: pointer;
+}

@@ -16,8 +16,8 @@ const CurrentWeather = ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
     // };
 
     const initCurWeather = {
-        weatherText: 'Minsk',
-        weatherIcon: 5,
+        weatherText: 'Sunny',
+        weatherIcon: 12,
         isDayTime: true,
         temperature: {
             Value: 55,
@@ -94,6 +94,11 @@ const CurrentWeather = ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
     //     const imageName = findImageName(curWeather.weatherIcon);
     //     const imageUrl = findBackgroundUrl(imageName);
     //     const backgroundImg = document.getElementsByClassName('background-image')[0].style;
+        // if (imageName === "fog" || imageName === "wind") {
+        //     document.getElementsByClassName('hourly-forecast').classList.toggle('grey');
+        //     document.getElementsByClassName('precipitation').classList.toggle('grey');
+        //     document.getElementsByClassName('daily-forecast').classList.toggle('grey');
+        // }
     //
     //     if (!isDayTime) {
     //         backgroundImg.backgroundImage = `linear-gradient(black, black), ${imageUrl}`;

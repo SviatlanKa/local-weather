@@ -82,8 +82,22 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
     //     }
     // }, [apiKey, baseUrl, isMetricSys, locationKey]);
 
-    const handleClick = () => {
-        document.getElementsByClassName('hourly-forecast-rows')[0].classList.toggle("translateX");
+    const handleClick = (e) => {
+        const firstRow = document.getElementById("first-row").classList;
+        const secondRow = document.getElementById("second-row").classList;
+        const leftArrow = document.getElementById("left-arrow");
+        const rightArrow = document.getElementById("right-arrow");
+        if (e.target.id === "right-arrow") {
+           firstRow.toggle("hidden");
+           secondRow.toggle("hidden");
+           rightArrow.style.visibility = "hidden";
+           leftArrow.style.visibility = "visible";
+        } else {
+            secondRow.toggle("hidden");
+            firstRow.toggle("hidden");
+            leftArrow.style.visibility = "hidden";
+            rightArrow.style.visibility = "visible";
+        }
     }
 
     const firstGroupData = hourlyForecast.slice(0, 6);
@@ -93,18 +107,18 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
         <div className="hourly-forecast">
             <span className="hourly-forecast-title">Hourly Forecast</span>
             <div className="hourly-forecast-panel">
-                <div className="left-arrow" type="button" onClick={() => handleClick()}>
+                <div id="left-arrow" className="arrow" type="button" onClick={handleClick}>
                     &#10094;
                 </div>
                 <div className="hourly-forecast-rows">
-                    <div className="hourly-forecast-row one">
+                    <div id="first-row" className="hourly-forecast-row">
                         {
                             firstGroupData.map((data, index) => (
                                 <HourlyForecastItem key={index} { ...data }/>
                             ))
                         }
                     </div>
-                    <div className="hourly-forecast-row two">
+                    <div id="second-row" className="hourly-forecast-row hidden">
                         {
                             secondGroupData.map((data, index) => (
                                 <HourlyForecastItem key={index + 6} { ...data }/>
@@ -112,7 +126,7 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
                         }
                     </div>
                 </div>
-                <div className="right-arrow" type="button" onClick={() => handleClick()}>
+                <div id="right-arrow" className="arrow" type="button" onClick={handleClick}>
                     &#10095;
                 </div>
             </div>

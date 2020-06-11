@@ -16,3 +16,7 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+.grey {
+  background-color: rgba(80, 98, 107, .3);
+}

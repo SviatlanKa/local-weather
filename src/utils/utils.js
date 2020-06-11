@@ -21,7 +21,7 @@ const weatherIcons = [
         rain: [12,13,14,18,26,39,40]
     },
     {
-        lightninig: [15,16,17,41,42]
+        lightning: [15,16,17,41,42]
     },
     {
         wind: [19,20,21,32,43]
@@ -87,8 +87,10 @@ export const convertKeys = obj => {
         }, {});
 };
 
-export const convertToCelsuis = temp => ((temp - 32) * 5 / 9);
+export const convertToCelsuis = temp => Math.round((temp - 32) * 5 / 9);
 
-export const convertToMetersInHour = mph => (mph / 2.237);
+export const convertToMetersInSec = mph => Math.round(mph / 2.237);
 
-export const convertToKm = mi => (mi * 1.609);
+export const changeBackgroundColor = (imageName) => {
+    return imageName === "fog" || imageName === "wind"
+};

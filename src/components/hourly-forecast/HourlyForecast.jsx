@@ -1,87 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from 'react';
+import { changeBackgroundColor } from '../../utils/utils';
 import WithSpinner from "../with-spinner/WithSpinner";
-import WeatherIcon from "../weather-icon/WeatherIcon";
-import { faTint, faTintSlash } from "@fortawesome/free-solid-svg-icons";
-import { convertKeys, convertToCelsuis } from "../../utils/utils";
-import './HourlyForecast.css'
 import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
+import './HourlyForecast.css'
 
-const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
-    const { locationKey } = initData;
-    //const [hourlyForecast, setHourlyForecast] = useState([]);
-    const init = () => {// will delete
-        let one = {
-        time: 12,
-        weatherIcon: 2,
-        hasPrecipitation: false,
-        precipitationProbability: 5,
-        temperature: 55
-        }
-        const arrFor = [one];
-        for(let i = 1; i < 12; i++) {
-            let { time,
-                weatherIcon,
-                hasPrecipitation,
-                precipitationProbability,
-                temperature } = one;
-            time++;
-            weatherIcon += 3;
-            hasPrecipitation = !hasPrecipitation;
-            temperature++;
-            one = {time,
-                weatherIcon,
-                hasPrecipitation,
-                precipitationProbability,
-                temperature}
-            arrFor.push(one)
-        }
-        console.log(arrFor)
-        return arrFor;
-    }
-    const initState = init();
-
-    const [hourlyForecast, setHourlyForecast] = useState(initState);
-
-    const [isFetching, setIsFetching] = useState(true);
-
-    // useEffect(() => {
-    //     let didCancel = false;
-    //     if (didCancel) { //temp block for stopping fetching from API
-    //         setIsFetching(true);
-    //         const getHourlyForecast = async () => {
-    //             fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}`)
-    //                 .then(res => res.json())
-    //                 .then(json => {
-    //                     let hourlyForecast = [];
-    //                     json.map(item => {
-    //                         item = convertKeys(item);
-    //                         const {
-    //                             weatherIcon,
-    //                             hasPrecipitation,
-    //                             precipitationProbability
-    //                         } = item;
-    //                         const time = new Date(item.dateTime).getHours();
-    //                         const temperature = isMetricSys ? convertToCelsuis(item.temperature.Value)
-    //                             : item.temperature.Value;
-    //                         hourlyForecast.push({
-    //                             time,
-    //                             weatherIcon,
-    //                             hasPrecipitation,
-    //                             precipitationProbability,
-    //                             temperature
-    //                         });
-    //                         return hourlyForecast;
-    //                     });
-    //                     setHourlyForecast(hourlyForecast);
-    //                     setIsFetching(false);
-    //                 })
-    //                 .catch(error => console.log(error.message));
-    //         }
-    //         getHourlyForecast().then(() => didCancel = true);
-    //     }
-    // }, [apiKey, baseUrl, isMetricSys, locationKey]);
-
+const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
     const handleClick = (e) => {
         const firstRow = document.getElementById("first-row").classList;
         const secondRow = document.getElementById("second-row").classList;
@@ -99,12 +22,11 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
             rightArrow.style.visibility = "visible";
         }
     }
-
     const firstGroupData = hourlyForecast.slice(0, 6);
     const secondGroupData = hourlyForecast.slice(6);
 
     return (
-        <div className="hourly-forecast">
+        <div className={`hourly-forecast${changeBackgroundColor(imageName) ? " grey" : ""}`}>
             <span className="hourly-forecast-title">Hourly Forecast</span>
             <div className="hourly-forecast-panel">
                 <div id="left-arrow" className="arrow" type="button" onClick={handleClick}>
@@ -113,15 +35,23 @@ const HourlyForecast= ({ apiKey, baseUrl, isMetricSys, ...initData }) => {
                 <div className="hourly-forecast-rows">
                     <div id="first-row" className="hourly-forecast-row">
                         {
-                            firstGroupData.map((data, index) => (
-                                <HourlyForecastItem key={index} { ...data }/>
+                            firstGroupData.map((hourForecast, index) => (
+                                <HourlyForecastItem
+                                    key={index}
+                                    isMetricSys={isMetricSys}
+                                    imageName={imageName}
+                                    { ...hourForecast }/>
                             ))
                         }
                     </div>
                     <div id="second-row" className="hourly-forecast-row hidden">
                         {
-                            secondGroupData.map((data, index) => (
-                                <HourlyForecastItem key={index + 6} { ...data }/>
+                            secondGroupData.map((hourForecast, index) => (
+                                <HourlyForecastItem
+                                    key={index + 6}
+                                    isMetricSys={isMetricSys}
+                                    imageName={imageName}
+                                    { ...hourForecast }/>
                             ))
                         }
                     </div>

@@ -1,5 +1,10 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import { findBackgroundUrl } from './utils/utils';
+import React, {useState, useEffect, Suspense, useLayoutEffect} from 'react';
+import {
+    convertKeys,
+    findImageName,
+    convertToCelsuis,
+    convertToMetersInSec, findBackgroundUrl
+} from './utils/utils';
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import Spinner from "./components/spinner/Spinner";
 import SetUnitButton from "./components/set-unit-button/SetUnitButton";
@@ -14,81 +19,188 @@ const apiKey = process.env.REACT_APP_API_KEY;
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const App = () => {
-    const [initData, setInitData] = useState({
-        locationKey: 28256,
-        name: 'Minsk'
-    });
     const [isMetricSys, setIsMetricSys] = useState(false);
-    const [isFetching, setIsFetching] = useState(false); // will change to true
+    const [isFetching, setIsFetching] = useState(true);
+    const [imageName, setImageName] = useState('');
 
-    // useEffect(() => {
-    //     let didCancel = false;
-    //     if (didCancel) { //temp block for stopping fetching from API
-    //         setIsFetching(true);
-    //         const getData = async () => {
-    //             const showLocation = (position) => {
-    //                 const {latitude, longitude} = position.coords;
-    //
-    //                 fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
-    //                     .then(res => res.json())
-    //                     .then(json => {
-    //                         setInitData({locationKey: json.Key, name: json.EnglishName});
-    //                         setIsFetching(false);
-    //                     })
-    //                     .catch(err => console.log(err.message));
+    const initCurWeather = {
+        weatherText: '',
+        weatherIcon: null,
+        isDayTime: true,
+        temperature: {},
+        realFeelTemperature: {},
+        wind: { speed: {}, direction: ''},
+        visibility: {}
+    };
+    const [name, setName] = useState('');
+    const [curWeather, setCurWeather] = useState(initCurWeather);
+    const [hourlyForecast, setHourlyForecast] = useState([]);
+    const [dailyForecast, setDailyForecast] = useState([]);
 
-    //             };
-    //             const errorHandler = (err) => {
-    //                 if (err.code === 1) alert("Error: Access is denied!");
-    //                 if (err.code === 2) alert("Error: Position is unavailable!");
-    //             };
-    //             navigator.geolocation ?
-    //                 navigator.geolocation.getCurrentPosition(showLocation, errorHandler)
-    //                 : alert("Sorry, browser does not support geolocation!");
-    //         };
-    //         getData().then(() => didCancel = true);
-    //     }
-    // }, []);
+    useEffect(() => {
+        let didCancel = false;
 
-    const curHours = new Date().getHours();
-    const imageName = (curHours > 6 && curHours < 22) ? "sun" : "moon";
-    const backgroundUrl = findBackgroundUrl(imageName);
+        const getData = async () => {
+            const showLocation = (position) => {
+                const {latitude, longitude} = position.coords;
+                setIsFetching(true);
+                fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
+                    .then(res => res.json())
+                    .then(json => {
+                        const locationKey = json.Key;
+                        const name = json.EnglishName;
+                        setName(name);
+
+                        setIsFetching(true);
+                        fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`)
+                            .then(res => res.json())
+                            .then(json => {
+                                json = convertKeys(json[0]);
+                                const { weatherText,
+                                    weatherIcon,
+                                    isDayTime,
+                                    temperature,
+                                    realFeelTemperature,
+                                    visibility
+                                } = json;
+
+                                const speed = {
+                                    metric: {
+                                        value: convertToMetersInSec(json.wind.Speed.Imperial.Value),
+                                        unit: 'm/s'
+                                    },
+                                    imperial: {
+                                        value: json.wind.Speed.Imperial.Value,
+                                        unit: json.wind.Speed.Imperial.Unit
+                                    }
+                                };
+                                const wind = { speed, direction: json.wind.Direction.English };
+                                setCurWeather({
+                                    weatherText,
+                                    weatherIcon,
+                                    isDayTime,
+                                    temperature,
+                                    realFeelTemperature,
+                                    wind,
+                                    visibility
+                                });
+                                const imageName = findImageName(weatherIcon);
+                                setImageName(imageName);
+                                setIsFetching(false);
+                            });
+                        setIsFetching(true);
+                        fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}`)
+                            .then(res => res.json())
+                            .then(json => {
+                                let hourlyForecast = [];
+                                json.map(item => {
+                                    item = convertKeys(item);
+                                    const {
+                                        weatherIcon,
+                                        hasPrecipitation,
+                                        precipitationProbability
+                                    } = item;
+                                    const time = new Date(item.dateTime).getHours();
+                                    const metric = convertToCelsuis(item.temperature.Value);
+                                    const imperial = item.temperature.Value;
+                                    const temperature = { metric, imperial }
+                                    hourlyForecast.push({
+                                        time,
+                                        weatherIcon,
+                                        hasPrecipitation,
+                                        precipitationProbability,
+                                        temperature
+                                    });
+                                    return hourlyForecast;
+                                });
+                                setHourlyForecast(hourlyForecast);
+                                setIsFetching(false);
+                            });
+                        setIsFetching(true);
+                        fetch(`${baseUrl}/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}`)
+                            .then(res => res.json())
+                            .then(json => {
+                                let dailyForecast = [];
+                                json.DailyForecasts.map(item => {
+                                    const date = new Date(item.Date).getDate();
+                                    const dayWeatherIcon = item.Day.Icon;
+                                    let metric = convertToCelsuis(item.Temperature.Maximum.Value);
+                                    let imperial = item.Temperature.Maximum.Value;
+                                    const maxTemperature = { metric, imperial };
+                                    metric = convertToCelsuis(item.Temperature.Minimum.Value);
+                                    imperial = item.Temperature.Minimum.Value;
+                                    const minTemperature = { metric, imperial };
+                                    dailyForecast.push({
+                                        date,
+                                        dayWeatherIcon,
+                                        maxTemperature,
+                                        minTemperature
+                                    });
+                                    return dailyForecast;
+                                });
+                                setDailyForecast(dailyForecast);
+                                setIsFetching(false);
+                            })
+
+                    }).catch(err => console.log(err.message));
+            };
+            const errorHandler = (err) => {
+                if (err.code === 1) alert("Error: Access is denied!");
+                if (err.code === 2) alert("Error: Position is unavailable!");
+            };
+            navigator.geolocation ?
+                navigator.geolocation.getCurrentPosition(showLocation, errorHandler)
+                : alert("Sorry, browser does not support geolocation!");
+        };
+        getData().then(() => didCancel = true);
+    }, []);
 
     const handleClick = (value) => {
         setIsMetricSys(value);
-    }
+    };
+
+    const backgroundUrl = findBackgroundUrl(imageName);
+
+    const dayBackground = {
+        backgroundImage: backgroundUrl
+    };
+    const nightBackground = {
+        backgroundImage: `linear-gradient(black, black),${backgroundUrl}`,
+        backgroundBlendMode: "saturation"
+    };
+
+    if (isFetching) return <Spinner/>
 
     return (
         <div className="App">
             <ErrorBoundary>
-                <Suspense fallback={<Spinner/>}>
-                    <div className="background-image"
-                         style={{backgroundImage: isFetching ? null : backgroundUrl }}
-                    >
-                        <SetUnitButton isMetricsSys={isMetricSys} onClick={handleClick}/>
-                        <CurrentWeather
-                            isFetching={isFetching}
-                            apiKey={apiKey}
-                            baseUrl={baseUrl}
-                            isMetricSys={isMetricSys}
-                            { ...initData }
+                <div className="background-image"
+                     style={isFetching ? null
+                             : curWeather.isDayTime ?
+                                 dayBackground
+                             : nightBackground
+                     }>
+                    <SetUnitButton isMetricsSys={isMetricSys} onClick={handleClick}/>
+                    <CurrentWeather
+                        isFetching={isFetching}
+                        isMetricSys={isMetricSys}
+                        curWeather={curWeather}
+                        name={name}
+                        imageName={imageName}
                         />
-                        <HourlyForecast
-                            isFetching={isFetching}
-                            apiKey={apiKey}
-                            baseUrl={baseUrl}
-                            isMetricSys={isMetricSys}
-                            { ...initData }
-                        />
-                        <DailyForecast
-                            isFetching={isFetching}
-                            apiKey={apiKey}
-                            baseUrl={baseUrl}
-                            isMetricSys={isMetricSys}
-                            { ...initData }
-                        />
-                    </div>
-                </Suspense>
+                    <HourlyForecast
+                        isFetching={isFetching}
+                        isMetricSys={isMetricSys}
+                        hourlyForecast={hourlyForecast}
+                        imageName={imageName}
+                    />
+                    <DailyForecast
+                        isFetching={isFetching}
+                        isMetricSys={isMetricSys}
+                        dailyForecast={dailyForecast}
+                        imageName={imageName}
+                    />
+                </div>
             </ErrorBoundary>
         </div>
     );

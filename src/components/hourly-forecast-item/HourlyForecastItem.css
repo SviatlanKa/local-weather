@@ -9,6 +9,6 @@
     filter: drop-shadow(1px 1px 1px #000000);
 }
 
-.grey {
-    background-color: rgba(80, 98, 107, .3);
+.precipitation-grey {
+    background-color: rgba(60, 75, 82, .3);
 }

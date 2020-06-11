@@ -1,14 +1,15 @@
 import React, {Fragment} from "react";
+import { changeBackgroundColor } from "../../utils/utils";
 import WeatherIcon from "../weather-icon/WeatherIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTint, faTintSlash } from "@fortawesome/free-solid-svg-icons";
 import './HourlyForecastItem.css';
 
-const HourlyForecastItem = ({ time, weatherIcon, temperature, hasPrecipitation, precipitationProbability }) => (
+const HourlyForecastItem = ({ isMetricSys, imageName, time, weatherIcon, temperature, hasPrecipitation, precipitationProbability }) => (
     <div className="hourly-forecast-item">
         <div>{time}:00</div>
         <WeatherIcon icon={weatherIcon} smallSize/>
-        <div className="precipitation">
+        <div className={`precipitation${changeBackgroundColor(imageName) ? " precipitation-grey" : ""}`}>
             {
                 hasPrecipitation ?
                     <Fragment>
@@ -23,7 +24,7 @@ const HourlyForecastItem = ({ time, weatherIcon, temperature, hasPrecipitation, 
                     </div>
             }
         </div>
-        <div>{temperature}°</div>
+        <div>{isMetricSys ? temperature.metric: temperature.imperial}°</div>
     </div>
 );
 

@@ -1,12 +1,12 @@
 import React from "react";
 import WeatherIcon from "../weather-icon/WeatherIcon";
 
-const DailyForecastItem = ({ date, dayWeatherIcon, maxTemperature, minTemperature }) => (
+const DailyForecastItem = ({ isMetricSys, date, dayWeatherIcon, maxTemperature, minTemperature }) => (
     <div className="daily-forecast-item">
         <div>{date}/5</div>
         <WeatherIcon icon={dayWeatherIcon} smallSize/>
-        <div>{maxTemperature}°</div>
-        <div>{minTemperature}°</div>
+        <div>{isMetricSys ? maxTemperature.metric : maxTemperature.imperial}°</div>
+        <div>{isMetricSys ? minTemperature.metric : minTemperature.imperial}°</div>
     </div>
 );
 

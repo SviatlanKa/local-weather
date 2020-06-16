@@ -28,12 +28,16 @@
 
 .hourly-forecast-rows {
     grid-template-columns: 1fr 1fr;
-    padding-bottom: 20px;
 }
 
 .hourly-forecast-row {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr minmax(3rem,5rem);
+}
+
+.hourly-forecast-cells {
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
     column-gap: 4px;
 }
 

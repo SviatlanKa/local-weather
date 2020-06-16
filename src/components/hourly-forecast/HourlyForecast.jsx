@@ -3,6 +3,7 @@ import { changeBackgroundColor } from '../../utils/utils';
 import WithSpinner from "../with-spinner/WithSpinner";
 import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
 import './HourlyForecast.css'
+import BarChart from "../bar-chart/BarChart";
 
 const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
     const handleClick = (e) => {
@@ -22,6 +23,7 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
             rightArrow.style.visibility = "visible";
         }
     }
+
     const firstGroupData = hourlyForecast.slice(0, 6);
     const secondGroupData = hourlyForecast.slice(6);
 
@@ -34,26 +36,33 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
                 </div>
                 <div className="hourly-forecast-rows">
                     <div id="first-row" className="hourly-forecast-row">
-                        {
-                            firstGroupData.map((hourForecast, index) => (
-                                <HourlyForecastItem
-                                    key={index}
-                                    isMetricSys={isMetricSys}
-                                    imageName={imageName}
-                                    { ...hourForecast }/>
-                            ))
-                        }
+                        <div className="hourly-forecast-cells">
+                            {
+                                firstGroupData.map((hourForecast, index) => (
+                                    <HourlyForecastItem
+                                        key={index}
+                                        isMetricSys={isMetricSys}
+                                        imageName={imageName}
+                                        { ...hourForecast }/>
+                                ))
+                            }
+                        </div>
+                        <BarChart data={firstGroupData} isMetricsSys={isMetricSys}/>
                     </div>
                     <div id="second-row" className="hourly-forecast-row hidden">
-                        {
+                        <div className="hourly-forecast-cells">
+                            {
                             secondGroupData.map((hourForecast, index) => (
                                 <HourlyForecastItem
                                     key={index + 6}
                                     isMetricSys={isMetricSys}
                                     imageName={imageName}
-                                    { ...hourForecast }/>
+                                    { ...hourForecast }
+                                />
                             ))
                         }
+                        </div>
+                        <BarChart data={secondGroupData} isMetricsSys={isMetricSys}/>
                     </div>
                 </div>
                 <div id="right-arrow" className="arrow" type="button" onClick={handleClick}>

@@ -2,6 +2,7 @@ import React from "react";
 import { changeBackgroundColor } from "../../utils/utils";
 import WithSpinner from "../with-spinner/WithSpinner";
 import DailyForecastItem from "../daily-forecast-item/DailyForecastItem";
+import BarChart from "../charts/bar-chart/BarChart";
 import './DailyForecast.css';
 
 const DailyForecast =({ isMetricSys, imageName, dailyForecast }) => (
@@ -14,6 +15,7 @@ const DailyForecast =({ isMetricSys, imageName, dailyForecast }) => (
                 ))
             }
         </div>
+        <BarChart data={dailyForecast} />
     </div>
 );
 

@@ -1,0 +1,14 @@
+.precipitation {
+    background-color: rgba(1, 90, 145, .3);
+}
+.precipitation-icon {
+    display: inline;
+    margin-right: 4px;
+    font-size: smaller;
+    color: white;
+    filter: drop-shadow(1px 1px 1px #000000);
+}
+
+.precipitation-grey {
+    background-color: rgba(60, 75, 82, .3);
+}

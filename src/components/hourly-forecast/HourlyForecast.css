@@ -1,6 +1,7 @@
 .hourly-forecast {
     display: grid;
     margin-top: 2vw;
+    padding-bottom: 1vw;
     filter: drop-shadow(3px 1px 2px #3c5563);
     background-color: rgba(1, 90, 145, .3);
 }
@@ -32,13 +33,14 @@
 
 .hourly-forecast-row {
     display: grid;
-    grid-template-rows: 1fr minmax(3rem,5rem);
+    grid-template-rows: 1fr minmax(3rem, 5rem);
 }
 
 .hourly-forecast-cells {
     display: grid;
-    grid-template-columns: repeat(6,1fr);
+    grid-template-columns: repeat(6, 1fr);
     column-gap: 4px;
+    padding: 0 4px;
 }
 
 .hidden {

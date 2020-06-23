@@ -1,0 +1,12 @@
+.area {
+    stroke: none;
+}
+
+.line {
+    stroke: white;
+}
+
+.text {
+    font-size: 1rem;
+    fill: white;
+}

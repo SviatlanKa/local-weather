@@ -87,7 +87,7 @@ export const convertKeys = obj => {
         }, {});
 };
 
-export const convertToCelsuis = temp => Math.round((temp - 32) * 5 / 9);
+export const convertToCelsius = temp => Math.round((temp - 32) * 5 / 9);
 
 export const convertToMetersInSec = mph => Math.round(mph / 2.237);
 

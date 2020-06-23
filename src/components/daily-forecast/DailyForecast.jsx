@@ -15,7 +15,7 @@ const DailyForecast =({ isMetricSys, imageName, dailyForecast }) => (
                 ))
             }
         </div>
-        <BarChart data={dailyForecast} />
+        <BarChart isMetricSys={isMetricSys} data={dailyForecast} />
     </div>
 );
 

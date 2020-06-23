@@ -7,8 +7,8 @@ const AreaChart = ({ data, isMetricSys, second }) => {
 
     useEffect(() => {
         if (data.length > 0) {
-            // let dataset = data.map(item =>  isMetricSys ? item.temperature.metric : item.temperature.imperial);
-            let dataset = data.map(item => item.temperature)
+            let dataset = data.map(item =>  isMetricSys ? item.temperature.metric : item.temperature.imperial);
+
             const maxVal = d3.max(dataset);
             const minVal = d3.min(dataset);
             const svgBBox = document.getElementById("area-chart-first").getBoundingClientRect();
@@ -17,18 +17,12 @@ const AreaChart = ({ data, isMetricSys, second }) => {
             const margin = 4;
 
             if (second) {
-                dataset = data.slice(5).map(item => item.temperature);
+                dataset = data.slice(5).map(item => isMetricSys ?
+                    item.temperature.metric : item.temperature.imperial);
             } else {
-                dataset = data.slice(0, 7).map(item => item.temperature);
+                dataset = data.slice(0, 7).map(item => isMetricSys ?
+                    item.temperature.metric : item.temperature.imperial);
             }
-
-            // if (hidden) {
-            //     dataset = data.slice(5).map(item => isMetricSys ?
-            //         item.temperature.metric : item.temperature.imperial);
-            // } else {
-            //     dataset = data.slice(0, 7).map(item => isMetricSys ?
-            //         item.temperature.metric : item.temperature.imperial);
-            // }
 
             const horizPadding = width / (dataset.length);
 

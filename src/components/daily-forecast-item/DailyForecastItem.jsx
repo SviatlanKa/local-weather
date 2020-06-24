@@ -9,24 +9,24 @@ const DailyForecastItem = ({ isMetricSys,
                                minTemperature,
                                ...otherProps }) => {
     const weekDays = {
-        0: "Sunday",
-        1: "Monday",
-        2: "Tuesday",
-        3: "Wednesday",
-        4: "Tuesday",
-        5: "Friday",
-        6: "Saturday"
+        0: "Sun",
+        1: "Mon",
+        2: "Tue",
+        3: "Wed",
+        4: "Thu",
+        5: "Fri",
+        6: "Sat"
     };
     const weekDay = new Date(date).getDay();
-    const day = date.getDate();
-    const month = date.getMonth();
+    const day = new Date(date).getDate();
+    const month = new Date(date).getMonth() + 1;
 
     return (
         <div className="daily-forecast-item">
             <div>{weekDays[weekDay]}</div>
-            <div>{day/month}</div>
+            <div>{day}/{month}</div>
             <WeatherIcon icon={dayWeatherIcon} smallSize />
-            <PrecipitationIcon {...otherProps} />
+            <PrecipitationIcon {...otherProps} />{/*noBackground/>*/}
             <div>{isMetricSys ? maxTemperature.metric : maxTemperature.imperial}°</div>
             <div>{isMetricSys ? minTemperature.metric : minTemperature.imperial}°</div>
         </div>

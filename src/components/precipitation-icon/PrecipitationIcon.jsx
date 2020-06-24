@@ -10,8 +10,10 @@ const PrecipitationIcon = ({imageName,
                                precipitationProbability,
                                rainProbability,
                                snowProbability,
-                               iceProbability}) => (
-    <div className={`precipitation${changeBackgroundColor(imageName) ? " precipitation-grey" : ""}`}>
+                               iceProbability,
+                           noBackground}) => (
+    <div className={`precipitation${changeBackgroundColor(imageName) ? " precipitation-grey" : ""}
+    ${noBackground ? "no-background" : ""}`}>
         {
             hasPrecipitation ?
                 <>

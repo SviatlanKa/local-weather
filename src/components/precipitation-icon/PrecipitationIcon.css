@@ -12,3 +12,7 @@
 .precipitation-grey {
     background-color: rgba(60, 75, 82, .3);
 }
+
+.no-background {
+    background-color: unset;
+}

@@ -2,8 +2,9 @@
     stroke: none;
 }
 
-.line {
+.value-line {
     stroke: white;
+    fill: none;
 }
 
 .text {

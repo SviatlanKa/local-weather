@@ -43,11 +43,13 @@ const DailyForecast =({ imageName, isMetricSys, ...initData }) => {
         <div className={`daily-forecast${changeBackgroundColor(imageName) ? " grey" : ""}`}>
             <span className="daily-forecast-title">Daily Forecast</span>
             <div className="daily-forecast-rows">
-                {
-                    dailyForecast.map((dayForecast, index) => (
-                        <DailyForecastItem key={index} isMetricSys={isMetricSys} {...dayForecast}/>
+                <div className="daily-forecast-cells">
+                    {
+                        dailyForecast.map((dayForecast, index) => (
+                             <DailyForecastItem key={index} isMetricSys={isMetricSys} {...dayForecast}/>
                     ))
-                }
+                    }
+                </div>
                 <BarChart isMetricSys={isMetricSys} data={dailyForecast}/>
             </div>
         </div>

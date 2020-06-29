@@ -1,15 +1,14 @@
 import * as d3 from 'd3';
-import React, {useEffect, useLayoutEffect} from "react";
+import React, { useEffect } from "react";
 import './AreaChart.css';
 
 const AreaChart = ({ data, isMetricSys, second }) => {
     const svgId = second ? "area-chart-second" : "area-chart-first";
 
-    useLayoutEffect(() => {
-        // if (data.length > 0) {
-            // let dataset = data.map(item =>  isMetricSys ? item.temperature.metric : item.temperature.imperial);
-            let dataset = isMetricSys ? [25,26,29,22,23,28,21,19,16,11,20,23] : [89,85,84,88,78,75,79,81,88,83,84,86]
-            console.log('isMS from AreaChart', isMetricSys)
+    useEffect(() => {
+        if (data.length > 0) {
+            let dataset = data.map(item => isMetricSys ? item.temperature.metric : item.temperature.imperial);
+            // let dataset = isMetricSys ? [25,26,29,22,23,28,21,19,16,11,20,23] : [89,85,84,88,78,75,79,81,88,83,84,86]
             const maxVal = d3.max(dataset);
             const minVal = d3.min(dataset);
             let svgBBox = document.getElementById("area-chart-first").getBoundingClientRect();
@@ -18,19 +17,19 @@ const AreaChart = ({ data, isMetricSys, second }) => {
             const height = svgBBox.height;
             const margin = 4;
 
-            if (second) {//DELETE THIS
-                dataset = dataset.slice(5);
-            } else {
-                dataset = dataset.slice(0, 7);
-            }
-
-            // if (second) {
-            //     dataset = data.slice(5).map(item => isMetricSys ?
-            //         item.temperature.metric : item.temperature.imperial);
+            // if (second) {//DELETE THIS
+            //     dataset = dataset.slice(5);
             // } else {
-            //     dataset = data.slice(0, 7).map(item => isMetricSys ?
-            //         item.temperature.metric : item.temperature.imperial);
+            //     dataset = dataset.slice(0, 7);
             // }
+
+            if (second) {
+                dataset = data.slice(5).map(item => isMetricSys ?
+                    item.temperature.metric : item.temperature.imperial);
+            } else {
+                dataset = data.slice(0, 7).map(item => isMetricSys ?
+                    item.temperature.metric : item.temperature.imperial);
+            }
 
             const horizPadding = width / (dataset.length);
 
@@ -58,8 +57,8 @@ const AreaChart = ({ data, isMetricSys, second }) => {
                 .y0(height)
                 .y1(d => scaleY(d));
             const valueLine = d3.line()
-                 .x((d, i) => scaleX(i) + margin / 2 * i)
-                 .y(d => scaleY(d));
+                .x((d, i) => scaleX(i) + margin / 2 * i)
+                .y(d => scaleY(d));
 
             charPlot.append("path")
                 .data([dataset])
@@ -94,7 +93,7 @@ const AreaChart = ({ data, isMetricSys, second }) => {
                 .enter()
                 .append("line")
                 .attr("class", "line")
-                .attr("x1",(d, i) => scaleX(i) + margin / 2 * i)
+                .attr("x1", (d, i) => scaleX(i) + margin / 2 * i)
                 .attr("y1", height)
                 .attr("x2", (d, i) => scaleX(i) + margin / 2 * i)
                 .attr("y2", d => scaleY(d))
@@ -108,41 +107,10 @@ const AreaChart = ({ data, isMetricSys, second }) => {
                 .append("text")
                 .attr("class", "text")
                 .attr("text-anchor", "middle")
-                .attr("x", (d,i) => scaleX(i) + margin / 2 * i)
+                .attr("x", (d, i) => scaleX(i) + margin / 2 * i)
                 .attr("y", d => scaleY(d) - margin * 2)
                 .text(d => d + "\u{BA}");
-
-            // dataset.map(data => console.log(scaleX(data)))
-
-            // svg.selectAll('rect')
-            //     .data(dataset)
-            //     .enter()
-            //     .append('rect')
-            //     .attr("class", "bar")
-            // .attr("x", (d, i) => scaleX(i))
-            // .attr("y", d => scaleY(d))
-            // .attr("width", width / dataset.length)
-            // .attr("height", d => height - scaleY(d));
-
-
-            //     .selectAll('rect')
-            //     .data(dataset)
-            //     .enter()
-            //     .append('rect')
-            //     .attr("class", "bar")
-            //     .attr("x", d => scaleX(1))
-            //     .attr("y", d => scaleY(d))
-            //     .attr("width", width / dataset.length * 1.5)
-            //     .attr("height", d => height - scaleY(d))
-            // .attr("x", 0)
-            // .attr("y", 10)
-            // .attr("width", "30px")
-            // .attr("height", "50px")
-            // .style("stroke-width", "1px")
-            // .style("stroke", "#154360")
-            // .style("fill", "red");
-        // }
-
+        }
     }, [data, svgId, second, isMetricSys])
 
     if (data.length === 0) return null;

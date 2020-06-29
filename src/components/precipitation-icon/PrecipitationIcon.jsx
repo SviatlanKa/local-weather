@@ -6,16 +6,16 @@ import { changeBackgroundColor } from "../../utils/utils";
 import './PrecipitationIcon.css';
 
 const PrecipitationIcon = ({imageName,
-                               hasPrecipitation,
                                precipitationProbability,
                                rainProbability,
                                snowProbability,
                                iceProbability,
-                           noBackground}) => (
+                           noBackground}) => {
+    return (
     <div className={`precipitation${changeBackgroundColor(imageName) ? " precipitation-grey" : ""}
     ${noBackground ? "no-background" : ""}`}>
         {
-            hasPrecipitation ?
+            precipitationProbability > 0 ?
                 <>
                     <div className="precipitation-icon">
                         <FontAwesomeIcon icon={(snowProbability + iceProbability > rainProbability) ?
@@ -30,6 +30,6 @@ const PrecipitationIcon = ({imageName,
                 </div>
         }
     </div>
-);
+);}
 
 export default PrecipitationIcon;

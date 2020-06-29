@@ -5,8 +5,6 @@ import PrecipitationIcon from "../precipitation-icon/PrecipitationIcon";
 const DailyForecastItem = ({ isMetricSys,
                                date,
                                dayWeatherIcon,
-                               maxTemperature,
-                               minTemperature,
                                ...otherProps }) => {
     const weekDays = {
         0: "Sun",
@@ -26,9 +24,7 @@ const DailyForecastItem = ({ isMetricSys,
             <div>{weekDays[weekDay]}</div>
             <div>{day}/{month}</div>
             <WeatherIcon icon={dayWeatherIcon} smallSize />
-            <PrecipitationIcon {...otherProps} />{/*noBackground/>*/}
-            <div>{isMetricSys ? maxTemperature.metric : maxTemperature.imperial}°</div>
-            <div>{isMetricSys ? minTemperature.metric : minTemperature.imperial}°</div>
+            <PrecipitationIcon {...otherProps} />
         </div>
     )
 };

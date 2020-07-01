@@ -1,5 +1,6 @@
 .hourly-forecast {
     display: grid;
+    width: 100%;
     margin-top: 2vw;
     padding-bottom: 1vw;
     filter: drop-shadow(3px 1px 2px #3c5563);
@@ -46,3 +47,10 @@
 .hidden {
     display: none;
 }
+
+/*@media screen and (max-width: 549px){*/
+/*    .hourly-forecast {*/
+/*        margin-top: 1vw;*/
+/*        padding-bottom: .8vw;*/
+/*    }*/
+/*}*/

@@ -1,7 +1,5 @@
 import React from "react";
 import WeatherIcon from "../weather-icon/WeatherIcon";
-
-import './HourlyForecastItem.css';
 import PrecipitationIcon from "../precipitation-icon/PrecipitationIcon";
 
 const HourlyForecastItem = ({ ...hourlyForecast }) => (

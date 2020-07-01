@@ -11,7 +11,7 @@
 .background-image {
   padding: 10px 20px 20px 20px;
   width: min-content;
-  min-width: 500px;
+  min-width: 550px;
   height: max-content;
   background-size: cover;
   background-repeat: no-repeat;
@@ -20,3 +20,13 @@
 .grey {
   background-color: rgba(80, 98, 107, .3);
 }
+
+/*@media screen and (max-width: 549px){*/
+/*  .App {*/
+/*    font-size: 1em;*/
+/*  }*/
+/*  .background-image {*/
+/*    min-width: 320px;*/
+/*    padding: 10px 10px;*/
+/*  }*/
+/*}*/

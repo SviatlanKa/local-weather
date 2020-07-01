@@ -25,6 +25,8 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
         }
     };
 
+    console.log()
+
     // const init = () => {// will delete
     //     let one = {
     //         time: 12,

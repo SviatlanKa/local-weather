@@ -16,6 +16,8 @@ const AreaChart = ({ data, isMetricSys, second }) => {
             const width = svgBBox.width;
             const height = svgBBox.height;
             const margin = 4;
+            console.log(width, height)
+            console.log(document.getElementById("first-row").getBBox())
 
             // if (second) {//DELETE THIS
             //     dataset = dataset.slice(5);

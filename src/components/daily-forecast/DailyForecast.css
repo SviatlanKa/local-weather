@@ -15,7 +15,7 @@
 
 .daily-forecast-columns {
     display: grid;
-    grid-template-rows: 1fr minmax(7rem, 9rem);
+    grid-template-rows: 1fr 1.4fr;
     margin: 0 20px;
 }
 
@@ -26,12 +26,8 @@
     column-gap: 4px;
 }
 
-/*@media screen and (max-width: 549px){*/
-/*    .daily-forecast {*/
-/*        margin-top: 1vw;*/
-/*    }*/
-/*    .daily-forecast-columns {*/
-/*        grid-template-rows: 1fr minmax(5rem, 7rem);*/
-/*        margin: 0 10px;*/
-/*    }*/
-/*}*/
+@media screen and (max-width: 550px){
+    .daily-forecast-columns {
+        margin: 0 10px;
+    }
+}

@@ -9,6 +9,12 @@
 .bigSize {
     margin-right: 0;
     margin-left: 50%;
-    horiz-align: right;
     width: 50%;
+}
+
+@media screen and (max-width: 550px) {
+    .smallSize {
+        width: 100%;
+        height: 100%;
+    }
 }

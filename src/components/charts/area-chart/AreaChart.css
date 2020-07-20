@@ -11,3 +11,9 @@
     font-size: 1rem;
     fill: white;
 }
+
+@media screen and (max-width: 550px) {
+    .text {
+        font-size: smaller;
+    }
+}

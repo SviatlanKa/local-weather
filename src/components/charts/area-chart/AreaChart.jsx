@@ -1,29 +1,16 @@
 import * as d3 from 'd3';
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import './AreaChart.css';
 
-const AreaChart = ({ data, isMetricSys, second }) => {
+const AreaChart = ({ data, isMetricSys, width, height, second }) => {
     const svgId = second ? "area-chart-second" : "area-chart-first";
 
-    useEffect(() => {
-        if (data.length > 0) {
+    useLayoutEffect(() => {
+        if (data.length > 0 && width > 0) {
             let dataset = data.map(item => isMetricSys ? item.temperature.metric : item.temperature.imperial);
-            // let dataset = isMetricSys ? [25,26,29,22,23,28,21,19,16,11,20,23] : [89,85,84,88,78,75,79,81,88,83,84,86]
             const maxVal = d3.max(dataset);
             const minVal = d3.min(dataset);
-            let svgBBox = document.getElementById("area-chart-first").getBoundingClientRect();
-            if (svgBBox.width === 0) svgBBox = document.getElementById("area-chart-second").getBoundingClientRect();
-            const width = svgBBox.width;
-            const height = svgBBox.height;
             const margin = 4;
-            console.log(width, height)
-            console.log(document.getElementById("first-row").getBBox())
-
-            // if (second) {//DELETE THIS
-            //     dataset = dataset.slice(5);
-            // } else {
-            //     dataset = dataset.slice(0, 7);
-            // }
 
             if (second) {
                 dataset = data.slice(5).map(item => isMetricSys ?
@@ -113,12 +100,13 @@ const AreaChart = ({ data, isMetricSys, second }) => {
                 .attr("y", d => scaleY(d) - margin * 2)
                 .text(d => d + "\u{BA}");
         }
-    }, [data, svgId, second, isMetricSys])
+    });
 
-    if (data.length === 0) return null;
+    if (width === 0) return null;
     return (
-        <svg id={svgId} width="100%" height="100%"></svg>
+        <svg id={svgId} width={width} height={height}>
+        </svg>
     )
-}
+};
 
 export default AreaChart;

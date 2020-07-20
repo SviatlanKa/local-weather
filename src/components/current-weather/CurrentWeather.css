@@ -24,12 +24,15 @@
     font-size: 4rem;
 }
 
-@media screen and (max-width: 549px){
+@media screen and (max-width: 550px){
     .current-weather {
-        padding: 0 20px;
+        padding: 0 10px;
+        min-width: 330px;
+        max-width: 540px;
     }
     .current-temperature {
         font-size: 2rem;
+
     }
     .city-name {
         font-size: 3rem;

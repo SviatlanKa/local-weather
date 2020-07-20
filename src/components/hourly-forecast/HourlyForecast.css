@@ -34,7 +34,7 @@
 
 .hourly-forecast-row {
     display: grid;
-    grid-template-rows: 1fr minmax(3rem, 5rem);
+    grid-template-rows: 1fr 1.2fr;
 }
 
 .hourly-forecast-cells {
@@ -48,9 +48,18 @@
     display: none;
 }
 
-/*@media screen and (max-width: 549px){*/
-/*    .hourly-forecast {*/
-/*        margin-top: 1vw;*/
-/*        padding-bottom: .8vw;*/
-/*    }*/
-/*}*/
+@media screen and (max-width: 550px){
+    .hourly-forecast {
+        min-width: 330px;
+        max-width: 540px;
+    }
+
+    .hourly-forecast-title {
+        width: max-content;
+    }
+
+    .hourly-forecast-rows {
+        min-width: 270px;
+        max-width: 490px;
+    }
+}

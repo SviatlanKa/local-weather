@@ -21,7 +21,12 @@ body {
   background: url('./assets/background-image.jpg') no-repeat fixed center;
 }
 
-/*@media screen and (max-width: 800px){*/
-
-/*}*/
+@media screen and (max-width: 550px){
+  body {
+    font-size: smaller;
+    font-weight: lighter;
+    min-width: 320px;
+    max-width: 550px;
+  }
+}
 

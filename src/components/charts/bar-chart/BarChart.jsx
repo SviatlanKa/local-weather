@@ -1,47 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import * as d3 from 'd3';
 
 const BarChart = ({ isMetricSys, data }) => {
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (data.length > 0) {
             let dataset = data.map(item =>  {
                 const minTemp = isMetricSys ? item.minTemperature.metric : item.minTemperature.imperial;
                 const maxTemp = isMetricSys ? item.maxTemperature.metric : item.maxTemperature.imperial;
                 return { minTemp, maxTemp };
             });
-            // let dataset = isMetricSys ? //DELETE THIS
-            //     [{
-            //         maxTemp: 25,
-            //         minTemp: 12
-            //     }, {
-            //         maxTemp: 24,
-            //         minTemp: 16
-            //     }, {
-            //         maxTemp: 26,
-            //         minTemp: 18
-            //     }, {
-            //         maxTemp: 28,
-            //         minTemp: 19
-            //     }, {
-            //         maxTemp: 23,
-            //         minTemp: 13
-            //     }]
-            //     : [{
-            //         maxTemp: 89,
-            //         minTemp: 56
-            //     }, {
-            //         maxTemp: 91,
-            //         minTemp: 61
-            //     }, {
-            //         maxTemp: 88,
-            //         minTemp: 55
-            //     }, {
-            //         maxTemp: 78,
-            //         minTemp: 52
-            //     }, {
-            //         maxTemp: 79,
-            //         minTemp: 53
-            //     }];
 
             const minVal = d3.min(dataset.map(item => item.minTemp));
             const maxVal = d3.max(dataset.map(item => item.maxTemp));
@@ -117,7 +84,6 @@ const BarChart = ({ isMetricSys, data }) => {
                 .attr("x", (d, i) => scaleX(i) + rectWidth / 1.5)
                 .attr("y", d => scaleY(d.maxTemp) - margin * 2)
                 .text(d => d.maxTemp + "\u{BA}");
-
         }
     }, [isMetricSys, data]);
 

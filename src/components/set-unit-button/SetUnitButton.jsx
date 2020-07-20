@@ -3,9 +3,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCog} from "@fortawesome/free-solid-svg-icons";
 import './SetUnitButton.css';
 
-const SetUnitButton = ({ isMetricsSys, onClick }) => {
+const SetUnitButton = ({ isMetricsSys, onHandleClick }) => {
     const handleClick = () => {
-        onClick(!isMetricsSys);
+        onHandleClick(!isMetricsSys);
     }
     return (
         <div className="set-units" onClick={handleClick}>

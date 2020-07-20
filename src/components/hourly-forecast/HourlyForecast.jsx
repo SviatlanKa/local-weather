@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { changeBackgroundColor } from '../../utils/utils';
-import WithSpinner from "../with-spinner/WithSpinner";
 import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
 import AreaChart from "../charts/area-chart/AreaChart";
 import './HourlyForecast.css';
 
-// const HourlyForecast= ({ isMetricSys, imageName }) => {
 const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
+    const firstRowRef = useRef(null);
+    const secondRowRef = useRef(null);
+
+    const [height, setHeight] = useState(0);
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+        const current = firstRowRef.current.style.visibility === "hidden" ?
+            secondRowRef.current : firstRowRef.current;
+        setWidth(current.offsetWidth);
+        const heightSvg = current.offsetHeight * .54;
+        console.log(heightSvg)
+        setHeight(heightSvg);
+        console.log(width, height)
+    }, [height, width]);
+
     const handleClick = (e) => {
-        const firstRow = document.getElementById("first-row").classList;
-        const secondRow = document.getElementById("second-row").classList;
+        const firstRow = firstRowRef.current.classList;
+        const secondRow = secondRowRef.current.classList;
         const leftArrow = document.getElementById("left-arrow");
         const rightArrow = document.getElementById("right-arrow");
         if (e.target.id === "right-arrow") {
@@ -24,41 +38,6 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
             rightArrow.style.visibility = "visible";
         }
     };
-
-    console.log()
-
-    // const init = () => {// will delete
-    //     let one = {
-    //         time: 12,
-    //         weatherIcon: 2,
-    //         hasPrecipitation: false,
-    //         precipitationProbability: 5,
-    //         temperature: 55
-    //     }
-    //     const arrFor = [one];
-    //     for(let i = 1; i < 12; i++) {
-    //         let { time,
-    //             weatherIcon,
-    //             hasPrecipitation,
-    //             precipitationProbability,
-    //             temperature } = one;
-    //         time++;
-    //         weatherIcon += 3;
-    //         hasPrecipitation = !hasPrecipitation;
-    //         temperature++;
-    //         one = {time,
-    //             weatherIcon,
-    //             hasPrecipitation,
-    //             precipitationProbability,
-    //             temperature}
-    //         arrFor.push(one)
-    //     }
-    //     return arrFor;
-    // }
-    // const initState = init();
-    //
-    // const [hourlyForecast, setHourlyForecast] = useState(initState);
-
     const firstGroupData = hourlyForecast.slice(0, 6);
     const secondGroupData = hourlyForecast.slice(6);
 
@@ -70,7 +49,7 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
                     &#10094;
                 </div>
                 <div className="hourly-forecast-rows">
-                    <div id="first-row" className="hourly-forecast-row">
+                    <div ref={firstRowRef} className="hourly-forecast-row">
                         <div className="hourly-forecast-cells">
                             {
                                 firstGroupData.map((hourForecast, index) => (
@@ -81,9 +60,9 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
                                 ))
                             }
                         </div>
-                        <AreaChart data={hourlyForecast} isMetricSys={isMetricSys}/>
+                        <AreaChart data={hourlyForecast} isMetricSys={isMetricSys} width={width} height={height}/>
                     </div>
-                    <div id="second-row" className="hourly-forecast-row hidden">
+                    <div ref={secondRowRef} className="hourly-forecast-row hidden">
                         <div className="hourly-forecast-cells">
                             {
                                 secondGroupData.map((hourForecast, index) => (
@@ -95,7 +74,7 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
                                 ))
                             }
                         </div>
-                        <AreaChart data={hourlyForecast} isMetricSys={isMetricSys} second/>
+                        <AreaChart data={hourlyForecast} isMetricSys={isMetricSys} width={width} height={height} second/>
                     </div>
                 </div>
                 <div id="right-arrow" className="arrow" type="button" onClick={handleClick}>
@@ -106,4 +85,4 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
     )
 };
 
-export default WithSpinner(HourlyForecast);
+export default HourlyForecast;

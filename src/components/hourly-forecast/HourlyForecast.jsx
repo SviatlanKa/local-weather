@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import { changeBackgroundColor } from '../../utils/utils';
 import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
 import AreaChart from "../charts/area-chart/AreaChart";
@@ -11,14 +11,15 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
     const [height, setHeight] = useState(0);
     const [width, setWidth] = useState(0);
 
-    useEffect(() => {
-        const current = firstRowRef.current.style.visibility === "hidden" ?
-            secondRowRef.current : firstRowRef.current;
-        setWidth(current.offsetWidth);
-        const heightSvg = current.offsetHeight * .54;
-        console.log(heightSvg)
-        setHeight(heightSvg);
-        console.log(width, height)
+        useEffect(() => {
+            setTimeout(() => {
+                const current = firstRowRef.current.style.visibility === "hidden" ?
+                    secondRowRef.current : firstRowRef.current;
+                const widthSvg = current.offsetWidth;
+                const heightSvg = current.offsetHeight * .54;
+                setWidth(widthSvg);
+                setHeight(heightSvg);
+            }, 150);
     }, [height, width]);
 
     const handleClick = (e) => {
@@ -40,7 +41,7 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
     };
     const firstGroupData = hourlyForecast.slice(0, 6);
     const secondGroupData = hourlyForecast.slice(6);
-
+    if (hourlyForecast.length === 0) return null;
     return (
         <div className={`hourly-forecast${changeBackgroundColor(imageName) ? " grey" : ""}`}>
             <span className="hourly-forecast-title">Hourly Forecast</span>

@@ -1,9 +1,11 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const BarChart = ({ isMetricSys, data }) => {
+const BarChart = ({ isMetricSys, data, width, height }) => {
+    const barChartRef = useRef(null);
+
     useLayoutEffect(() => {
-        if (data.length > 0) {
+        if (data.length > 0 && width > 0) {
             let dataset = data.map(item =>  {
                 const minTemp = isMetricSys ? item.minTemperature.metric : item.minTemperature.imperial;
                 const maxTemp = isMetricSys ? item.maxTemperature.metric : item.maxTemperature.imperial;
@@ -12,16 +14,12 @@ const BarChart = ({ isMetricSys, data }) => {
 
             const minVal = d3.min(dataset.map(item => item.minTemp));
             const maxVal = d3.max(dataset.map(item => item.maxTemp));
-
-            const svgBBox = document.getElementById("bar-chart").getBoundingClientRect();
-            const width = svgBBox.width;
-            const height = svgBBox.height;
             const margin = 4;
 
             const cellWidth = width / dataset.length;
             const rectWidth = cellWidth / 7;
 
-            const svg = d3.select("#bar-chart");
+            const svg = d3.select(barChartRef.current);
             svg.selectAll('*').remove();
 
             const defs = svg.append("defs");
@@ -85,11 +83,11 @@ const BarChart = ({ isMetricSys, data }) => {
                 .attr("y", d => scaleY(d.maxTemp) - margin * 2)
                 .text(d => d.maxTemp + "\u{BA}");
         }
-    }, [isMetricSys, data]);
+    });
 
-    if (data.length === 0) return null;
+    if (data.length === 0 || width === 0) return null;
     return (
-        <svg id="bar-chart" width="100%" height="100%"></svg>
+        <svg ref={barChartRef} width={width} height={height}></svg>
     )
 };
 

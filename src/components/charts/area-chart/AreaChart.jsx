@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
-import React, { useLayoutEffect } from "react";
+import React, {useEffect, useRef} from "react";
 import './AreaChart.css';
 
 const AreaChart = ({ data, isMetricSys, width, height, second }) => {
-    const svgId = second ? "area-chart-second" : "area-chart-first";
+    const firstRef = useRef(null);
+    const secondRef = useRef(null);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (data.length > 0 && width > 0) {
             let dataset = data.map(item => isMetricSys ? item.temperature.metric : item.temperature.imperial);
             const maxVal = d3.max(dataset);
@@ -22,7 +23,9 @@ const AreaChart = ({ data, isMetricSys, width, height, second }) => {
 
             const horizPadding = width / (dataset.length);
 
-            const svg = d3.select(`#${svgId}`);
+            let svg = d3.select(firstRef.current);
+            if (second) svg = d3.select(secondRef.current);
+
             svg.selectAll('*').remove();
 
             const scaleX = d3.scaleLinear()
@@ -100,13 +103,15 @@ const AreaChart = ({ data, isMetricSys, width, height, second }) => {
                 .attr("y", d => scaleY(d) - margin * 2)
                 .text(d => d + "\u{BA}");
         }
-    });
+    }, [data, isMetricSys, width, height, second]);
 
-    if (width === 0) return null;
-    return (
-        <svg id={svgId} width={width} height={height}>
-        </svg>
-    )
+    if (data.length === 0 || width === 0) return null;
+
+    if (second) {
+        return <svg ref={secondRef} width={width} height={height}></svg>
+    }
+
+    return <svg ref={firstRef} width={width} height={height}></svg>
 };
 
 export default AreaChart;

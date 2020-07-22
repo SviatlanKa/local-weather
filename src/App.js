@@ -45,18 +45,18 @@ const App = () => {
             const {latitude, longitude} = position.coords;
             setIsFetching(true);
             setErr(false);
-            // await fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
-            //     .then(res => res.json())
-            //     .then(async json => {
-                    let json = GEOPOSITION; //delete this! Only for testing
+            await fetch(`${baseUrl}/locations/v1/cities/geoposition/search?apikey=${apiKey}&q=${latitude},${longitude}`)
+                .then(res => res.json())
+                .then(async json => {
+                    // let json = GEOPOSITION; //delete this! Only for testing
                     const locationKey = json.Key;
                     const name = json.EnglishName;
                     setName(name);
 
-                    // await fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`)
-                    //     .then(res => res.json())
-                    //     .then(json => {
-                            json = CUR_WEATHER; //delete this! Only for testing
+                    await fetch(`${baseUrl}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`)
+                        .then(res => res.json())
+                        .then(json => {
+                            // json = CUR_WEATHER; //delete this! Only for testing
                             json = convertKeys(json[0]);
                             const { weatherText,
                                 weatherIcon,
@@ -88,11 +88,11 @@ const App = () => {
                             });
                             const imageName = findImageName(weatherIcon);
                             setImageName(imageName);
-                        // }).catch(error => setErr(true));
-                    // await fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}&details=true`)
-                    //     .then(res => res.json())
-                    //     .then(json => {
-                            json = HOURLY_FORECAST; //delete this! Only for testing
+                        }).catch(error => setErr(true));
+                    await fetch(`${baseUrl}/forecasts/v1/hourly/12hour/${locationKey}?apikey=${apiKey}&details=true`)
+                        .then(res => res.json())
+                        .then(json => {
+                            // json = HOURLY_FORECAST; //delete this! Only for testing
                             let hourlyForecast = [];
                             json.map(item => {
                                 item = convertKeys(item);
@@ -119,11 +119,11 @@ const App = () => {
                                 return hourlyForecast;
                             });
                             setHourlyForecast(hourlyForecast);
-                    //     }).catch(error => setErr(true));
-                    // await fetch(`${baseUrl}/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}&details=true`)
-                    //     .then(res => res.json())
-                    //     .then(json => {
-                            json = DAILY_FORECAST; //delete this! Only for testing
+                        }).catch(error => setErr(true));
+                    await fetch(`${baseUrl}/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}&details=true`)
+                        .then(res => res.json())
+                        .then(json => {
+                            // json = DAILY_FORECAST; //delete this! Only for testing
                             let dailyForecast = [];
                             json.DailyForecasts.map(item => {
                                 const dayWeatherIcon = item.Day.Icon;
@@ -151,10 +151,10 @@ const App = () => {
                                 return dailyForecast;
                             });
                             setDailyForecast(dailyForecast);
-                        // }).catch(error => setErr(true));
-                // }).catch(error => setErr(true))
-                // .finally(() => setIsFetching(false));
-            setIsFetching(false)//DELETE THIS
+                        }).catch(error => setErr(true));
+                }).catch(error => setErr(true))
+                .finally(() => setIsFetching(false));
+            // setIsFetching(false)//DELETE THIS
         };
         const errorHandler = (err) => {
             if (err.code === 1) {

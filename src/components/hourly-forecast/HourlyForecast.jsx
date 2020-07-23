@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { changeBackgroundColor } from '../../utils/utils';
 import HourlyForecastItem from "../hourly-forecast-item/HourlyForecastItem";
 import AreaChart from "../charts/area-chart/AreaChart";

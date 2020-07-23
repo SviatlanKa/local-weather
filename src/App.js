@@ -10,10 +10,10 @@ import SetUnitButton from "./components/set-unit-button/SetUnitButton";
 import CurrentWeather from './components/current-weather/CurrentWeather';
 import HourlyForecast from "./components/hourly-forecast/HourlyForecast";
 import DailyForecast from "./components/daily-forecast/DailyForecast";
-import { GEOPOSITION } from "./responses/geoposition";
-import { CUR_WEATHER } from "./responses/current_weather";
-import { DAILY_FORECAST } from "./responses/daily_forecast";
-import { HOURLY_FORECAST } from "./responses/hourly_forecast";
+// import { GEOPOSITION } from "./responses/geoposition";
+// import { CUR_WEATHER } from "./responses/current_weather";
+// import { DAILY_FORECAST } from "./responses/daily_forecast";
+// import { HOURLY_FORECAST } from "./responses/hourly_forecast";
 import './App.css';
 
 const apiKey = process.env.REACT_APP_API_KEY;

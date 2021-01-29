@@ -15,7 +15,7 @@ const DailyForecast =({ isMetricSys, imageName, dailyForecast }) => {
             const heightSvg = columnsRef.current.offsetHeight * .54;
             setWidth(widthSvg);
             setHeight(heightSvg);
-        }, 1000);
+        }, 300);
     }, [width, height]);
 
     if (dailyForecast.length === 0) return null;

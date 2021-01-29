@@ -19,7 +19,7 @@ const HourlyForecast= ({ isMetricSys, imageName, hourlyForecast }) => {
                 const heightSvg = current.offsetHeight * .54;
                 setWidth(widthSvg);
                 setHeight(heightSvg);
-            }, 300);
+            }, 500);
     }, [height, width]);
 
     const handleClick = (e) => {
